@@ -30,9 +30,9 @@ fn main(){
         let load: f32 = 100.0 - (user / number) * 100.0;
         for n in 1..100{
             if n > load as i32 {
-                print!("\x1b[37m█\x1b[0m");
+                print!("\x1b[37m▄\x1b[0m");
             } else {
-                print!("\x1b[31m█\x1b[0m");
+                print!("\x1b[31m▄\x1b[0m");
             }
         }
         println!(" -> {:.2}%\n", load);
