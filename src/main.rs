@@ -1,38 +1,33 @@
-use std::fs::File;
-use std::io::{self, BufRead};
-use std::path::Path;
+use std::fs::{self};
 
 fn main(){
     let mut path = String::new();
-    let mut counter = 0;
-    let mut number: u64;
 
     path.push_str("/proc/stat");
-    while let Ok(line) = read_lines(path){
-        let mut index = 1;
-        let mut user = 0;
-        if counter == 0{
-            counter += 1;
-            continue ;
-        }
-        number = 0;
-        let byte = line.split_whitespace();
-        print!("{}", byte);
+    let content = fs::read_to_string(path)
+        .expect("Permission denied");
+    for line in content.lines(){
+        let mut index = 0;
+        let mut number: f32 = 0.0;
+        let mut user: f32 = 0.0;
+
         for byte in line.split_whitespace() {
-            let value = byte.trim().parse.expect("Parsing error");
+            if index == 0{
+                if byte.as_bytes()[0] != b'c'{
+                    return ;
+                }
+                print!("{} ", byte);
+                index += 1;
+                continue ;
+            };
+            let value = byte.trim().parse().expect("Parsing error");
             number += value;
             if index == 4{
                 user = value;
             }
             index += 1;
         }
-        let load = 100 - (user / number) * 100;
-        println!("{}%", load);
+        let load: f32 = 100.0 - (user / number) * 100.0;
+        println!("{:.2}%", load);
     }
-}
-
-fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
-where P: AsRef<Path>, {
-    let file = File::open(filename)?;
-    Ok(io::BufReader::new(file).lines())
 }
