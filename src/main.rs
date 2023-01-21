@@ -16,7 +16,7 @@ fn main(){
                 if byte.as_bytes()[0] != b'c'{
                     return ;
                 }
-                print!("{} ", byte);
+                print!("{} : ", byte);
                 index += 1;
                 continue ;
             };
@@ -28,6 +28,13 @@ fn main(){
             index += 1;
         }
         let load: f32 = 100.0 - (user / number) * 100.0;
-        println!("{:.2}%", load);
+        for n in 1..100{
+            if n > load as i32 {
+                print!("\x1b[37m█\x1b[0m");
+            } else {
+                print!("\x1b[31m█\x1b[0m");
+            }
+        }
+        println!(" -> {:.2}%\n", load);
     }
 }
